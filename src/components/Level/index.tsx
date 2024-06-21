@@ -1,19 +1,10 @@
-import {
-  TouchableOpacity,
-  TouchableOpacityProps,
-  Text,
-  View,
-} from 'react-native';
+import {TouchableOpacityProps, Pressable} from 'react-native';
 
-import {THEME} from '../../styles/theme';
+import Animated from 'react-native-reanimated';
 
+import {TYPE_COLORS, useAnimatedColor} from './animations/useAnimatedColor';
+import {useAnimatedScale} from './animations/useAnimatedScale';
 import {styles} from './styles';
-
-const TYPE_COLORS = {
-  EASY: THEME.COLORS.BRAND_LIGHT,
-  HARD: THEME.COLORS.DANGER_LIGHT,
-  MEDIUM: THEME.COLORS.WARNING_LIGHT,
-};
 
 type Props = TouchableOpacityProps & {
   title: string;
@@ -27,26 +18,27 @@ export function Level({
   isChecked = false,
   ...rest
 }: Props) {
-  const COLOR = TYPE_COLORS[type];
+  const {animatedScaleStyle, onPressIn, onPressOut} = useAnimatedScale();
+  const {animatedBgColorStyle, COLOR, animatedTextColor} = useAnimatedColor(
+    isChecked,
+    type,
+  );
 
   return (
-    <TouchableOpacity {...rest}>
-      <View
+    <Pressable onPressIn={onPressIn} onPressOut={onPressOut} {...rest}>
+      <Animated.View
         style={[
           styles.container,
+          animatedScaleStyle,
+          animatedBgColorStyle,
           {
             borderColor: COLOR,
-            backgroundColor: isChecked ? COLOR : 'transparent',
           },
         ]}>
-        <Text
-          style={[
-            styles.title,
-            {color: isChecked ? THEME.COLORS.GREY_100 : COLOR},
-          ]}>
+        <Animated.Text style={[styles.title, animatedTextColor]}>
           {title}
-        </Text>
-      </View>
-    </TouchableOpacity>
+        </Animated.Text>
+      </Animated.View>
+    </Pressable>
   );
 }

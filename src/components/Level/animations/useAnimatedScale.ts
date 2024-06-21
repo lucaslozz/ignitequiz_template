@@ -6,18 +6,18 @@ import {
 
 export function useAnimatedScale() {
   const scale = useSharedValue(1);
-  const animatedContainerStyle = useAnimatedStyle(() => {
+  const animatedScaleStyle = useAnimatedStyle(() => {
     return {
-  transform: [{scale: scale.value}],
+      transform: [{scale: scale.value}],
     };
   });
 
   function onPressIn() {
-    scale.value = withTiming(1.1);
+    scale.value = withTiming(1.2);
   }
 
   function onPressOut() {
-    scale.value = withTiming(1.1);
+    scale.value = withTiming(1);
   }
-  return {onPressIn, onPressOut, animatedContainerStyle};
+  return {onPressIn, onPressOut, animatedScaleStyle};
 }
