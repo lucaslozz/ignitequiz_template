@@ -1,5 +1,6 @@
-import { StyleSheet } from 'react-native';
-import { THEME } from '../../styles/theme';
+import {StyleSheet} from 'react-native';
+
+import {THEME} from '../../styles/theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -10,7 +11,7 @@ export const styles = StyleSheet.create({
     paddingBottom: 24,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   title: {
     fontSize: 24,
@@ -28,6 +29,6 @@ export const styles = StyleSheet.create({
     borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: THEME.COLORS.GREY_800
-  }
+    backgroundColor: THEME.COLORS.GREY_800,
+  },
 });

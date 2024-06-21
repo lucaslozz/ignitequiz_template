@@ -1,41 +1,42 @@
-import { useEffect, useState } from 'react';
-import { Alert, ScrollView, View } from 'react-native';
+import {useEffect, useState} from 'react';
+import {Alert, ScrollView, View} from 'react-native';
 
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
-import { styles } from './styles';
+import {ConfirmButton} from '../../components/ConfirmButton';
+import {Loading} from '../../components/Loading';
+import {OutlineButton} from '../../components/OutlineButton';
+import {Question} from '../../components/Question';
+import {QuizHeader} from '../../components/QuizHeader';
+import {QUIZ} from '../../data/quiz';
+import {historyAdd} from '../../storage/quizHistoryStorage';
 
-import { QUIZ } from '../../data/quiz';
-import { historyAdd } from '../../storage/quizHistoryStorage';
-
-import { Loading } from '../../components/Loading';
-import { Question } from '../../components/Question';
-import { QuizHeader } from '../../components/QuizHeader';
-import { ConfirmButton } from '../../components/ConfirmButton';
-import { OutlineButton } from '../../components/OutlineButton';
+import {styles} from './styles';
 
 interface Params {
   id: string;
 }
 
-type QuizProps = typeof QUIZ[0];
+type QuizProps = (typeof QUIZ)[0];
 
 export function Quiz() {
   const [points, setPoints] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [quiz, setQuiz] = useState<QuizProps>({} as QuizProps);
-  const [alternativeSelected, setAlternativeSelected] = useState<null | number>(null);
+  const [alternativeSelected, setAlternativeSelected] = useState<null | number>(
+    null,
+  );
 
-  const { navigate } = useNavigation();
+  const {navigate} = useNavigation();
 
   const route = useRoute();
-  const { id } = route.params as Params;
+  const {id} = route.params as Params;
 
   function handleSkipConfirm() {
     Alert.alert('Pular', 'Deseja realmente pular a questão?', [
-      { text: 'Sim', onPress: () => handleNextQuestion() },
-      { text: 'Não', onPress: () => { } }
+      {text: 'Sim', onPress: () => handleNextQuestion()},
+      {text: 'Não', onPress: () => {}},
     ]);
   }
 
@@ -45,7 +46,7 @@ export function Quiz() {
       title: quiz.title,
       level: quiz.level,
       points,
-      questions: quiz.questions.length
+      questions: quiz.questions.length,
     });
 
     navigate('finish', {
@@ -56,7 +57,7 @@ export function Quiz() {
 
   function handleNextQuestion() {
     if (currentQuestion < quiz.questions.length - 1) {
-      setCurrentQuestion(prevState => prevState + 1)
+      setCurrentQuestion(prevState => prevState + 1);
     } else {
       handleFinished();
     }
@@ -83,7 +84,7 @@ export function Quiz() {
       {
         text: 'Sim',
         style: 'destructive',
-        onPress: () => navigate('home')
+        onPress: () => navigate('home'),
       },
     ]);
 
@@ -103,15 +104,14 @@ export function Quiz() {
   }, [points]);
 
   if (isLoading) {
-    return <Loading />
+    return <Loading />;
   }
 
   return (
     <View style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.question}
-      >
+        contentContainerStyle={styles.question}>
         <QuizHeader
           title={quiz.title}
           currentQuestion={currentQuestion + 1}
@@ -130,6 +130,6 @@ export function Quiz() {
           <ConfirmButton onPress={handleConfirm} />
         </View>
       </ScrollView>
-    </View >
+    </View>
   );
 }

@@ -1,9 +1,10 @@
-import { Text, View } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {Text, View} from 'react-native';
 
-import { Button } from '../../components/Button';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
-import { styles } from './styles';
+import {Button} from '../../components/Button';
+
+import {styles} from './styles';
 
 interface Params {
   total: string;
@@ -12,26 +13,21 @@ interface Params {
 
 export function Finish() {
   const route = useRoute();
-  const { points, total } = route.params as Params;
+  const {points, total} = route.params as Params;
 
-  const { navigate } = useNavigation();
+  const {navigate} = useNavigation();
 
   return (
     <View style={styles.container}>
       <View style={styles.message}>
-        <Text style={styles.title}>
-          Parabéns!
-        </Text>
+        <Text style={styles.title}>Parabéns!</Text>
 
         <Text style={styles.subtitle}>
           Você acertou {points} de {total} questões
         </Text>
       </View>
 
-      <Button
-        title="Ir para o início"
-        onPress={() => navigate('home')}
-      />
+      <Button title="Ir para o início" onPress={() => navigate('home')} />
     </View>
   );
 }

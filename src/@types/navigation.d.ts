@@ -2,9 +2,9 @@ export declare global {
   namespace ReactNavigation {
     interface RootParamList {
       home: undefined;
-      quiz: { id: string };
+      quiz: {id: string};
       history: undefined;
-      finish: { total: string, points: string };
+      finish: {total: string; points: string};
     }
   }
 }

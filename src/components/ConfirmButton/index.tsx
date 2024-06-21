@@ -1,25 +1,17 @@
-import { Check } from 'phosphor-react-native';
-import { Text, TouchableOpacity, TouchableOpacityProps } from 'react-native';
+import {Text, TouchableOpacity, TouchableOpacityProps} from 'react-native';
 
-import { styles } from './styles';
-import { THEME } from '../../styles/theme';
+import {Check} from 'phosphor-react-native';
 
-export function ConfirmButton({ ...rest }: TouchableOpacityProps) {
+import {THEME} from '../../styles/theme';
+
+import {styles} from './styles';
+
+export function ConfirmButton({...rest}: TouchableOpacityProps) {
   return (
-    <TouchableOpacity
-      activeOpacity={0.7}
-      style={styles.container}
-      {...rest}
-    >
-      <Text style={styles.title}>
-        Confirmar
-      </Text>
+    <TouchableOpacity activeOpacity={0.7} style={styles.container} {...rest}>
+      <Text style={styles.title}>Confirmar</Text>
 
-      <Check
-        color={THEME.COLORS.WHITE}
-        weight="bold"
-        size={24}
-      />
+      <Check color={THEME.COLORS.WHITE} weight="bold" size={24} />
     </TouchableOpacity>
   );
 }

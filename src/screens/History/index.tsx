@@ -1,20 +1,21 @@
-import { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { View, ScrollView, TouchableOpacity, Alert } from 'react-native';
-import { HouseLine } from 'phosphor-react-native';
+import {useEffect, useState} from 'react';
+import {View, ScrollView, TouchableOpacity, Alert} from 'react-native';
 
-import { Header } from '../../components/Header';
-import { HistoryCard, HistoryProps } from '../../components/HistoryCard';
+import {useNavigation} from '@react-navigation/native';
+import {HouseLine} from 'phosphor-react-native';
 
-import { styles } from './styles';
-import { historyGetAll, historyRemove } from '../../storage/quizHistoryStorage';
-import { Loading } from '../../components/Loading';
+import {Header} from '../../components/Header';
+import {HistoryCard, HistoryProps} from '../../components/HistoryCard';
+import {Loading} from '../../components/Loading';
+import {historyGetAll, historyRemove} from '../../storage/quizHistoryStorage';
+
+import {styles} from './styles';
 
 export function History() {
   const [isLoading, setIsLoading] = useState(true);
   const [history, setHistory] = useState<HistoryProps[]>([]);
 
-  const { goBack } = useNavigation();
+  const {goBack} = useNavigation();
 
   async function fetchHistory() {
     const response = await historyGetAll();
@@ -29,17 +30,13 @@ export function History() {
   }
 
   function handleRemove(id: string) {
-    Alert.alert(
-      'Remover',
-      'Deseja remover esse registro?',
-      [
-        {
-          text: 'Sim', onPress: () => remove(id)
-        },
-        { text: 'Não', style: 'cancel' }
-      ]
-    );
-
+    Alert.alert('Remover', 'Deseja remover esse registro?', [
+      {
+        text: 'Sim',
+        onPress: () => remove(id),
+      },
+      {text: 'Não', style: 'cancel'},
+    ]);
   }
 
   useEffect(() => {
@@ -47,7 +44,7 @@ export function History() {
   }, []);
 
   if (isLoading) {
-    return <Loading />
+    return <Loading />;
   }
 
   return (
@@ -61,18 +58,12 @@ export function History() {
 
       <ScrollView
         contentContainerStyle={styles.history}
-        showsVerticalScrollIndicator={false}
-      >
-        {
-          history.map((item) => (
-            <TouchableOpacity
-              key={item.id}
-              onPress={() => handleRemove(item.id)}
-            >
-              <HistoryCard data={item} />
-            </TouchableOpacity>
-          ))
-        }
+        showsVerticalScrollIndicator={false}>
+        {history.map(item => (
+          <TouchableOpacity key={item.id} onPress={() => handleRemove(item.id)}>
+            <HistoryCard data={item} />
+          </TouchableOpacity>
+        ))}
       </ScrollView>
     </View>
   );

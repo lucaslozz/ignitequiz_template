@@ -1,5 +1,6 @@
-import { StyleSheet } from 'react-native';
-import { THEME } from '../../styles/theme';
+import {StyleSheet} from 'react-native';
+
+import {THEME} from '../../styles/theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -22,6 +23,6 @@ export const styles = StyleSheet.create({
   },
   checked: {
     borderWidth: 1,
-    borderColor: THEME.COLORS.BRAND_LIGHT
-  }
+    borderColor: THEME.COLORS.BRAND_LIGHT,
+  },
 });
