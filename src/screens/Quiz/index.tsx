@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import {Alert, ScrollView, View} from 'react-native';
 
 import {useNavigation, useRoute} from '@react-navigation/native';
+import Animated from 'react-native-reanimated';
 
 import {ConfirmButton} from '../../components/ConfirmButton';
 import {Loading} from '../../components/Loading';
@@ -11,6 +12,7 @@ import {QuizHeader} from '../../components/QuizHeader';
 import {QUIZ} from '../../data/quiz';
 import {historyAdd} from '../../storage/quizHistoryStorage';
 
+import {useAnimatedShake} from './animations/useAnimatedShake';
 import {styles} from './styles';
 
 interface Params {
@@ -27,6 +29,8 @@ export function Quiz() {
   const [alternativeSelected, setAlternativeSelected] = useState<null | number>(
     null,
   );
+
+  const {animatedShakeStyle, shakeAnimation} = useAnimatedShake();
 
   const {navigate} = useNavigation();
 
@@ -70,9 +74,13 @@ export function Quiz() {
 
     if (quiz.questions[currentQuestion].correct === alternativeSelected) {
       setPoints(prevState => prevState + 1);
+    } else {
+      shakeAnimation();
     }
 
     setAlternativeSelected(null);
+
+    handleNextQuestion();
   }
 
   function handleStop() {
@@ -118,12 +126,14 @@ export function Quiz() {
           totalOfQuestions={quiz.questions.length}
         />
 
-        <Question
-          key={quiz.questions[currentQuestion].title}
-          question={quiz.questions[currentQuestion]}
-          alternativeSelected={alternativeSelected}
-          setAlternativeSelected={setAlternativeSelected}
-        />
+        <Animated.View style={animatedShakeStyle}>
+          <Question
+            key={quiz.questions[currentQuestion].title}
+            question={quiz.questions[currentQuestion]}
+            alternativeSelected={alternativeSelected}
+            setAlternativeSelected={setAlternativeSelected}
+          />
+        </Animated.View>
 
         <View style={styles.footer}>
           <OutlineButton title="Parar" onPress={handleStop} />

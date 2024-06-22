@@ -18,7 +18,7 @@ export function useAnimatedProgress(current: number, total: number) {
 
   useEffect(() => {
     progress.value = withTiming(percentage);
-  }, [current]);
+  }, [percentage]);
 
   return {
     animatedProgressStyle,
