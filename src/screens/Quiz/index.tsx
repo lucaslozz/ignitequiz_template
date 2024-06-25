@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Alert, ScrollView, View} from 'react-native';
+import {Alert, Text, View} from 'react-native';
 
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Animated from 'react-native-reanimated';
@@ -7,11 +7,13 @@ import Animated from 'react-native-reanimated';
 import {ConfirmButton} from '../../components/ConfirmButton';
 import {Loading} from '../../components/Loading';
 import {OutlineButton} from '../../components/OutlineButton';
+import {ProgressBar} from '../../components/ProgressBar';
 import {Question} from '../../components/Question';
 import {QuizHeader} from '../../components/QuizHeader';
 import {QUIZ} from '../../data/quiz';
 import {historyAdd} from '../../storage/quizHistoryStorage';
 
+import {useAnimatedScroll} from './animations/useAnimatedScroll';
 import {useAnimatedShake} from './animations/useAnimatedShake';
 import {styles} from './styles';
 
@@ -31,7 +33,8 @@ export function Quiz() {
   );
 
   const {animatedShakeStyle, shakeAnimation} = useAnimatedShake();
-
+  const {scrollHandler, fixedProgressBarStyleAnimated, headerStyleAnimated} =
+    useAnimatedScroll();
   const {navigate} = useNavigation();
 
   const route = useRoute();
@@ -117,14 +120,25 @@ export function Quiz() {
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.question}>
-        <QuizHeader
-          title={quiz.title}
-          currentQuestion={currentQuestion + 1}
-          totalOfQuestions={quiz.questions.length}
+      <Animated.View style={fixedProgressBarStyleAnimated}>
+        <Text style={styles.title}>{quiz.title}</Text>
+
+        <ProgressBar
+          total={quiz.questions.length}
+          current={currentQuestion + 1}
         />
+      </Animated.View>
+      <Animated.ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.question}
+        onScroll={scrollHandler}>
+        <Animated.View style={[headerStyleAnimated, styles.header]}>
+          <QuizHeader
+            title={quiz.title}
+            currentQuestion={currentQuestion + 1}
+            totalOfQuestions={quiz.questions.length}
+          />
+        </Animated.View>
 
         <Animated.View style={animatedShakeStyle}>
           <Question
@@ -139,7 +153,7 @@ export function Quiz() {
           <OutlineButton title="Parar" onPress={handleStop} />
           <ConfirmButton onPress={handleConfirm} />
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
     </View>
   );
 }
