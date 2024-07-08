@@ -1,9 +1,9 @@
 import {StyleSheet} from 'react-native';
 
-import {THEME} from '../../styles/theme';
-
 export const styles = StyleSheet.create({
   container: {
-    backgroundColor: THEME.COLORS.GREY_800,
+    left: 0,
+    right: 0,
+    position: 'absolute',
   },
 });

@@ -1,30 +1,27 @@
-import {useEffect, useRef, useState} from 'react';
-import {ScrollView, Alert, View} from 'react-native';
+import {useEffect, useState} from 'react';
+import {View} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
-import {HouseLine, Trash} from 'phosphor-react-native';
-import {Swipeable} from 'react-native-gesture-handler';
-import Animated, {
-  LinearTransition,
-  SlideInRight,
-  SlideOutRight,
-} from 'react-native-reanimated';
+import {HouseLine} from 'phosphor-react-native';
+import Animated from 'react-native-reanimated';
 
 import {Header} from '../../components/Header';
 import {HistoryCard, HistoryProps} from '../../components/HistoryCard';
+import {CARD_HEIGHT} from '../../components/HistoryCard/styles';
 import {Loading} from '../../components/Loading';
-import {historyGetAll, historyRemove} from '../../storage/quizHistoryStorage';
-import {THEME} from '../../styles/theme';
+import {MovableCard} from '../../components/MovableCard/MovableCard';
+import {historyGetAll} from '../../storage/quizHistoryStorage';
 
+import {useAnimatedScroll} from './animations/useAnimatedScroll';
 import {styles} from './styles';
 
 export function History() {
   const [isLoading, setIsLoading] = useState(true);
   const [history, setHistory] = useState<HistoryProps[]>([]);
 
-  const swipeableRefs = useRef<Swipeable[]>([]);
-
   const {goBack} = useNavigation();
+
+  const {onScroll, scrollY} = useAnimatedScroll();
 
   async function fetchHistory() {
     const response = await historyGetAll();
@@ -32,22 +29,22 @@ export function History() {
     setIsLoading(false);
   }
 
-  async function remove(id: string) {
-    await historyRemove(id);
+  // async function remove(id: string) {
+  //   await historyRemove(id);
 
-    fetchHistory();
-  }
+  //   fetchHistory();
+  // }
 
-  function handleRemove(id: string, index: number) {
-    swipeableRefs.current[index].close();
-    Alert.alert('Remover', 'Deseja remover esse registro?', [
-      {
-        text: 'Sim',
-        onPress: () => remove(id),
-      },
-      {text: 'Não', style: 'cancel'},
-    ]);
-  }
+  // function handleRemove(id: string, index: number) {
+  //   swipeableRefs.current[index].close();
+  //   Alert.alert('Remover', 'Deseja remover esse registro?', [
+  //     {
+  //       text: 'Sim',
+  //       onPress: () => remove(id),
+  //     },
+  //     {text: 'Não', style: 'cancel'},
+  //   ]);
+  // }
 
   useEffect(() => {
     fetchHistory();
@@ -66,32 +63,36 @@ export function History() {
         onPress={goBack}
       />
 
-      <ScrollView
-        contentContainerStyle={styles.history}
-        showsVerticalScrollIndicator={false}>
-        {history.map((item, index) => (
-          <Animated.View
+      <Animated.ScrollView
+        contentContainerStyle={[
+          styles.history,
+          {height: history.length * CARD_HEIGHT},
+        ]}
+        showsVerticalScrollIndicator={false}
+        style={{height: 100}}
+        scrollEventThrottle={16}
+        onScroll={onScroll}>
+        {history.map(item => (
+          <MovableCard
+            cardId={+item.id}
             key={item.id}
-            entering={SlideInRight}
-            exiting={SlideOutRight}
-            layout={LinearTransition.springify()}>
-            <Swipeable
-              ref={ref => {
-                if (ref) swipeableRefs.current.push(ref);
-              }}
-              leftThreshold={5}
-              onSwipeableOpen={() => handleRemove(item.id, index)}
-              containerStyle={styles.swipeableContainer}
-              renderLeftActions={() => (
-                <View style={styles.swipeableRemove}>
-                  <Trash size={32} color={THEME.COLORS.GREY_100} />
-                </View>
-              )}>
-              <HistoryCard data={item} />
-            </Swipeable>
-          </Animated.View>
+            list={history}
+            scrollY={scrollY}
+            cardsCount={history.length}>
+            {/* <View
+              style={{
+                width: '100%',
+                height: CARD_HEIGHT,
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'red',
+              }}>
+              <Text>teste</Text>
+            </View> */}
+            <HistoryCard data={item} />
+          </MovableCard>
         ))}
-      </ScrollView>
+      </Animated.ScrollView>
     </View>
   );
 }

@@ -2,17 +2,19 @@ import {StyleSheet} from 'react-native';
 
 import {THEME} from '../../styles/theme';
 
+export const HEIGHT = 90;
+export const MARGIN_BOTTOM = 12;
+export const CARD_HEIGHT = HEIGHT + MARGIN_BOTTOM;
 export const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: 90,
+    height: HEIGHT,
     borderRadius: 6,
     backgroundColor: THEME.COLORS.GREY_700,
-    padding: 16,
+    paddingHorizontal: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
   },
   title: {
     color: THEME.COLORS.GREY_100,

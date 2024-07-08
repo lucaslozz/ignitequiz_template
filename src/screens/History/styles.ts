@@ -8,8 +8,9 @@ export const styles = StyleSheet.create({
     backgroundColor: THEME.COLORS.GREY_800,
   },
   history: {
-    flexGrow: 1,
-    padding: 32,
+    paddingHorizontal: 32,
+    flex: 1,
+    position: 'relative',
   },
   swipeableRemove: {
     width: 90,
@@ -24,6 +25,5 @@ export const styles = StyleSheet.create({
     height: 90,
     borderRadius: 6,
     backgroundColor: THEME.COLORS.DANGER_LIGHT,
-    marginBottom: 12,
   },
 });
